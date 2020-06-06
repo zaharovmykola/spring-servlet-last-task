@@ -120,21 +120,9 @@ public class SecondServlet extends HttpServlet {
             // HOME WORK
         } else if (req.getParameter("action").equals("getInfo")) {
             // я пока просто скопировал имплементацию предыдущего ифа
-            resp.setContentType("image/jpeg");
-            ServletOutputStream out = resp.getOutputStream();
-            FileInputStream fin =
-                    new FileInputStream("D:/IdeaProjects/java-servlet-maven-master/" + req.getParameter("filename"));
-            BufferedInputStream bin = new BufferedInputStream(fin);
-            BufferedOutputStream bout = new BufferedOutputStream(out);
-            int ch = 0;
-            while((ch = bin.read()) != -1)
-            {
-                bout.write(ch);
-            }
-            bin.close();
-            fin.close();
-            bout.close();
-            out.close();
+            Storage.modelList.forEach(model -> {
+
+            });
         }
         // TODO здесь добавить еще один if, который будет срабатывать на запрос на адрес вида:
         // http://0.0.0.0:8888/single-servlet/second-servlet?action=getInfo&username=user_name,
