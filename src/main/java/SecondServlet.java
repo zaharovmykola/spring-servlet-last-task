@@ -37,7 +37,7 @@ public class SecondServlet extends HttpServlet {
                 // сохраняем userName в поле обьекта
                 model.userName = userName;
                 // если встречаем часть под именем image, то
-            } else if(part.getName().equals("image")) {
+            } else if (part.getName().equals("image")) {
                 // сохраняем название картинки в поле обьекта
                 model.image = UUID.randomUUID().toString() + part.getSubmittedFileName();
                 // сохраняем на жесткий дисл под именем, которое состоит из
@@ -58,15 +58,15 @@ public class SecondServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // http://0.0.0.0:8888/single-servlet/second-servlet?action=getFileNames
         // Получить список имен файлов, ранее сохраненных на сервере
-        if (req.getParameter("action").equals("getFileNames")){
+        if (req.getParameter("action").equals("getFileNames")) {
             // перебираем все елементы листа
             Storage.modelList.forEach(model -> {
                 try {
                     // resp.getWriter().println(model.image);
-                    if (model.image != null){
-                       // resp.getWriter()
-                        //        .println("<a href='http://0.0.0.0:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image+"'>"+model.image+"</a><br>");
-                         resp.getWriter().println("<a href='http://0.0.0.0:8888/single-servlet/second-servlet?action=getInfo&username="+model.userName+"'>"+model.userName+"</a><br>");
+                    if (model.image != null) {
+                        //resp.getWriter()
+                        //.println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image+"'>"+model.image+"</a><br>");
+                        resp.getWriter().println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br>");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -106,8 +106,7 @@ public class SecondServlet extends HttpServlet {
             // перебираем байты пока они существуют
             // берем входной поток данных, методом read получаем порции данных
             // возращает -1 если данные закончились
-            while((ch = bin.read()) != -1)
-            {
+            while ((ch = bin.read()) != -1) {
                 // берем этот байт и ево выталкиваем на веб клиента через bout
                 // каждый write кидает каждый байтик веб-клиенту
                 bout.write(ch);
@@ -121,21 +120,40 @@ public class SecondServlet extends HttpServlet {
         } else if (req.getParameter("action").equals("getInfo")) {
             // я пока просто скопировал имплементацию предыдущего ифа
             Storage.modelList.forEach(model -> {
-
+                try {
+                    resp.getWriter().println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br>");
+                    resp.getWriter().println("<h2>" +
+                            "<!DOCTYPE html>\n" +
+                            "<html lang=\"en\">\n" +
+                            "<head>\n" +
+                            "    <meta charset=\"UTF-8\">\n" +
+                            "    <title>Dream job</title>\n" +
+                            "<head>\n" +
+                            "<body>\n" +
+                            "    <h1>model.userName</h1>\n" +
+                            "    <img src=\"http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=model.image\"/>\n" +
+                            "</body>\n" +
+                            "</html>" +
+                            "</h2>");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
+
+            //
+            // TODO здесь добавить еще один if, который будет срабатывать на запрос на адрес вида:
+            // http://0.0.0.0:8888/single-servlet/second-servlet?action=getInfo&username=user_name,
+            // где user_name - динамически подставленное имя файла
+            // по имени пользователя найдите из списка моделей одну модель,
+            // сформируйте при помощи вызовов метода writer.println(...)
+            // веб-страницу для клиента, в разметку которой добавьте элементы:
+            // h2 - с именем пользователя
+            // и img со ссылкой на изображение, подставленной в атрибут src
+            // (имя пользователя и имя файла получите из модели)
+            // подсказка: в атрибутах src формируйте гиперссылки вида:
+            // http://0.0.0.0:8888/single-servlet/second-servlet?action=getFile&filename=file_name
+            // , тогда браузер будет для получения каждого изображения сам обращаться к
+            // текущему сервлету, к ветке логики метода doGet, которая возвращает картинку по ее имени
         }
-        // TODO здесь добавить еще один if, который будет срабатывать на запрос на адрес вида:
-        // http://0.0.0.0:8888/single-servlet/second-servlet?action=getInfo&username=user_name,
-        // где user_name - динамически подставленное имя файла
-        // по имени пользователя найдите из списка моделей одну модель,
-        // сформируйте при помощи вызовов метода writer.println(...)
-        // веб-страницу для клиента, в разметку которой добавьте элементы:
-        // h2 - с именем пользователя
-        // и img со ссылкой на изображение, подставленной в атрибут src
-        // (имя пользователя и имя файла получите из модели)
-        // подсказка: в атрибутах src формируйте гиперссылки вида:
-        // http://0.0.0.0:8888/single-servlet/second-servlet?action=getFile&filename=file_name
-        // , тогда браузер будет для получения каждого изображения сам обращаться к
-        // текущему сервлету, к ветке логики метода doGet, которая возвращает картинку по ее имени
     }
 }
