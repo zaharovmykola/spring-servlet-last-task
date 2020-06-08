@@ -6,18 +6,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import javax.swing.text.html.Option;
 import java.io.*;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @WebServlet(urlPatterns = {"second-servlet"})
-@MultipartConfig(location = "/home/yurii/IdeaProjects/ItStep/OdE2191/javaee/servlet")
+@MultipartConfig(location = "D:\\IdeaProjects\\java-servlet-maven-master\\")
 public class SecondServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // достаем части данных из сервлета и перебираем циклом
+        Model model = new Model();
         for (Part part : req.getParts()) {
-            Model model = new Model();
             // Іf - это что делать с каждой из частей данных
             // которые пришлт от клиента
 
@@ -45,8 +47,8 @@ public class SecondServlet extends HttpServlet {
                 part.write(model.image);
             }
             // и сохраням обьект в лист
-            Storage.modelList.add(model);
         }
+        Storage.modelList.add(model);
         // Что после всего этого отправить клиенту - указания браузеру еще куда-то обратится
 
         // в ответ присылаем браузеру указания перейти на заданный адрес
@@ -119,43 +121,61 @@ public class SecondServlet extends HttpServlet {
             // HOME WORK
         } else if (req.getParameter("action").equals("getInfo")) {
             // я пока просто скопировал имплементацию предыдущего ифа
-            Storage.modelList.forEach(model -> {
+            Optional<Model> modelOption = Storage.modelList.stream().filter(m ->
+                    m.userName.equals(req.getParameter("username"))
+            ).findFirst();
+            if (modelOption.isPresent()) {
+                Model model = modelOption.get();
                 if (model.image != null) {
                     try {
-                        resp.getWriter().println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br>");
-                        resp.getWriter().println("<h2>" +
+                        resp.getWriter().println(
                                 "<!DOCTYPE html>\n" +
-                                "<html lang=\"en\">\n" +
-                                "<head>\n" +
-                                "    <meta charset=\"UTF-8\">\n" +
-                                "    <title>Dream job</title>\n" +
-                                "<head>\n" +
-                                "<body>\n" +
-                                "    <h1>model.userName</h1>\n" +
-                                "    <img src=\"http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=model.image\"/>\n" +
-                                "</body>\n" +
-                                "</html>" +
-                                "</h2>");
+                                        "<html lang=\"en\">\n" +
+                                        "<head>\n" +
+                                        "    <meta charset=\"UTF-8\">\n" +
+                                        "    <title>Dream job</title>\n" +
+                                        "</head>\n" +
+                                        "<body>\n" +
+                                        "    <h1>" + model.userName + "</h1>\n" +
+                                        "<img src='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image + "'/>" +
+                                        "</body>\n" +
+                                        "</html>"
+                        );
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
-            });
+                } else  {
+                    resp.getWriter().println(
+                            "<!DOCTYPE html>\n" +
+                                    "<html lang=\"en\">\n" +
+                                    "<head>\n" +
+                                    "    <meta charset=\"UTF-8\">\n" +
+                                    "    <title>Dream job</title>\n" +
+                                    "</head>\n" +
+                                    "<body>\n" +
+                                    "    <h1>User with name '"+ req.getParameter("username")+"' not found</h1>\n" +
 
-            //
-            // TODO здесь добавить еще один if, который будет срабатывать на запрос на адрес вида:
-            // http://0.0.0.0:8888/single-servlet/second-servlet?action=getInfo&username=user_name,
-            // где user_name - динамически подставленное имя файла
-            // по имени пользователя найдите из списка моделей одну модель,
-            // сформируйте при помощи вызовов метода writer.println(...)
-            // веб-страницу для клиента, в разметку которой добавьте элементы:
-            // h2 - с именем пользователя
-            // и img со ссылкой на изображение, подставленной в атрибут src
-            // (имя пользователя и имя файла получите из модели)
-            // подсказка: в атрибутах src формируйте гиперссылки вида:
-            // http://0.0.0.0:8888/single-servlet/second-servlet?action=getFile&filename=file_name
-            // , тогда браузер будет для получения каждого изображения сам обращаться к
-            // текущему сервлету, к ветке логики метода doGet, которая возвращает картинку по ее имени
+                                    "</body>\n" +
+                                    "</html>"
+                    );
+            }
         }
+
+
+        //
+        // TODO здесь добавить еще один if, который будет срабатывать на запрос на адрес вида:
+        // http://0.0.0.0:8888/single-servlet/second-servlet?action=getInfo&username=user_name,
+        // где user_name - динамически подставленное имя файла
+        // по имени пользователя найдите из списка моделей одну модель,
+        // сформируйте при помощи вызовов метода writer.println(...)
+        // веб-страницу для клиента, в разметку которой добавьте элементы:
+        // h2 - с именем пользователя
+        // и img со ссылкой на изображение, подставленной в атрибут src
+        // (имя пользователя и имя файла получите из модели)
+        // подсказка: в атрибутах src формируйте гиперссылки вида:
+        // http://0.0.0.0:8888/single-servlet/second-servlet?action=getFile&filename=file_name
+        // , тогда браузер будет для получения каждого изображения сам обращаться к
+        // текущему сервлету, к ветке логики метода doGet, которая возвращает картинку по ее имени
     }
+}
 }
