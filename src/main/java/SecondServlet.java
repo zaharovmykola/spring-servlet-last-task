@@ -89,7 +89,7 @@ public class SecondServlet extends HttpServlet {
             // FileInputStream - закачываем внутрь логики сервлета файл с жесткого диска сервера
             // FileInputStream - подготавливает эти данные из файла, вот их выкачивать
             FileInputStream fin =
-                    new FileInputStream("D:/IdeaProjects/java-servlet-maven-master/" + req.getParameter("filename"));
+                    new FileInputStream("D:\\IdeaProjects\\java-servlet-maven-master\\" + req.getParameter("filename"));
             // - подготавливаем входной поток
             // с помощью которго мы загрузим сначала эту картинку в оперативку,
             // чтобы потом передать ее веб-клиенту,
@@ -120,23 +120,25 @@ public class SecondServlet extends HttpServlet {
         } else if (req.getParameter("action").equals("getInfo")) {
             // я пока просто скопировал имплементацию предыдущего ифа
             Storage.modelList.forEach(model -> {
-                try {
-                    resp.getWriter().println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br>");
-                    resp.getWriter().println("<h2>" +
-                            "<!DOCTYPE html>\n" +
-                            "<html lang=\"en\">\n" +
-                            "<head>\n" +
-                            "    <meta charset=\"UTF-8\">\n" +
-                            "    <title>Dream job</title>\n" +
-                            "<head>\n" +
-                            "<body>\n" +
-                            "    <h1>model.userName</h1>\n" +
-                            "    <img src=\"http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=model.image\"/>\n" +
-                            "</body>\n" +
-                            "</html>" +
-                            "</h2>");
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (model.image != null) {
+                    try {
+                        resp.getWriter().println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br>");
+                        resp.getWriter().println("<h2>" +
+                                "<!DOCTYPE html>\n" +
+                                "<html lang=\"en\">\n" +
+                                "<head>\n" +
+                                "    <meta charset=\"UTF-8\">\n" +
+                                "    <title>Dream job</title>\n" +
+                                "<head>\n" +
+                                "<body>\n" +
+                                "    <h1>model.userName</h1>\n" +
+                                "    <img src=\"http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=model.image\"/>\n" +
+                                "</body>\n" +
+                                "</html>" +
+                                "</h2>");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
