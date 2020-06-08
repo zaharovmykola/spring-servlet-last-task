@@ -144,21 +144,21 @@ public class SecondServlet extends HttpServlet {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                } else  {
-                    resp.getWriter().println(
-                            "<!DOCTYPE html>\n" +
-                                    "<html lang=\"en\">\n" +
-                                    "<head>\n" +
-                                    "    <meta charset=\"UTF-8\">\n" +
-                                    "    <title>Dream job</title>\n" +
-                                    "</head>\n" +
-                                    "<body>\n" +
-                                    "    <h1>User with name '"+ req.getParameter("username")+"' not found</h1>\n" +
+                }
+            } else  {
+                resp.getWriter().println(
+                        "<!DOCTYPE html>\n" +
+                                "<html lang=\"en\">\n" +
+                                "<head>\n" +
+                                "    <meta charset=\"UTF-8\">\n" +
+                                "    <title>Dream job</title>\n" +
+                                "</head>\n" +
+                                "<body>\n" +
+                                "    <h1>User with name '"+ req.getParameter("username")+"' not found</h1>\n" +
 
-                                    "</body>\n" +
-                                    "</html>"
-                    );
-            }
+                                "</body>\n" +
+                                "</html>"
+                );
         }
 
 
