@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Dream job</title>
+    <style>
+        .fig {
+        text-align: center;
+        }
+    </style>
 </head>
 <body>
+    <div class='fig'>
     <h1>Hello from Index.html!</h1>
     <form method="post" action="/single-servlet/second-servlet" enctype="multipart/form-data">
         <input type="text" name="user_name">
         <input type="file" name="image">
         <button>Send</button>
     </form>
+        <p></p>
+        <a href="http://127.0.0.1:8888/single-servlet/second-servlet?action=getFileNames">List of Files</a>
+    </div>
 </body>
 </html>

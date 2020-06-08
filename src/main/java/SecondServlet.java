@@ -62,13 +62,63 @@ public class SecondServlet extends HttpServlet {
         // Получить список имен файлов, ранее сохраненных на сервере
         if (req.getParameter("action").equals("getFileNames")) {
             // перебираем все елементы листа
+            //resp.getWriter().println("<a href='http://127.0.0.1:8888/single-servlet'>Add Files</a><br><br>");
+
+
+            resp.getWriter().println(
+                    "<!DOCTYPE html>\n" +
+                            "<html lang=\"en\">\n" +
+                            "<head>\n" +
+                            "    <meta charset=\"UTF-8\">\n" +
+                            "    <title>Dream job</title>\n" +
+                            "<style>"+
+                            ".fig {" +
+                            "text-align: center;" +
+                            "}" +
+                            "</style>" +
+                            "</head>\n" +
+                            "<body>\n" +
+                            "<div class='fig'>" +
+                            "<a href='http://127.0.0.1:8888/single-servlet'>Add Files</a><br><br>" +
+                            "<p></p>" +
+                            "</div>" +
+                            "</body>\n" +
+                            "</html>"
+            );
+
+
             Storage.modelList.forEach(model -> {
                 try {
                     // resp.getWriter().println(model.image);
                     if (model.image != null) {
                         //resp.getWriter()
                         //.println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image+"'>"+model.image+"</a><br>");
-                        resp.getWriter().println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br>");
+                        //resp.getWriter().println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br><br>");
+
+
+                        resp.getWriter().println(
+                                "<!DOCTYPE html>\n" +
+                                        "<html lang=\"en\">\n" +
+                                        "<head>\n" +
+                                        "    <meta charset=\"UTF-8\">\n" +
+                                        "    <title>Dream job</title>\n" +
+                                        "<style>"+
+                                        ".fig {" +
+                                        "text-align: center;" +
+                                        "}" +
+                                        "</style>" +
+                                        "</head>\n" +
+                                        "<body>\n" +
+                                        "<div class='fig'>" +
+                                        "<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br><br>" +
+                                        "<p></p>" +
+                                        "</div>" +
+                                        "</body>\n" +
+                                        "</html>"
+                        );
+
+
+
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -134,10 +184,22 @@ public class SecondServlet extends HttpServlet {
                                         "<head>\n" +
                                         "    <meta charset=\"UTF-8\">\n" +
                                         "    <title>Dream job</title>\n" +
+                                        "<style>"+
+                                        ".fig {" +
+                                        "text-align: center;" +
+                                        "}" +
+                                        "</style>" +
                                         "</head>\n" +
                                         "<body>\n" +
-                                        "    <h1>" + model.userName + "</h1>\n" +
-                                        "<img src='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image + "'/>" +
+                                        "<div class='fig'>" +
+                                        "<h1 >" + model.userName + "</h1>\n" +
+                                        "<img src='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image + "' width=\"229\" height=\"274\"/>" +
+                                        "<p></p>" +
+                                        "<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFileNames'>List of Files</a><br>" +
+                                        "<p></p>" +
+                                        "<a href='http://127.0.0.1:8888/single-servlet'>Add Files</a><br>" +
+                                        "<p></p>" +
+                                        "</div>" +
                                         "</body>\n" +
                                         "</html>"
                         );
