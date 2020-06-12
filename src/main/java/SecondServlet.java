@@ -60,28 +60,10 @@ public class SecondServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // http://0.0.0.0:8888/single-servlet/second-servlet?action=getFileNames
         // Получить список имен файлов, ранее сохраненных на сервере
+        String htmlPartCodeStyle = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Dream job</title>\n<style>\nsection {\nposition: absolute;\ntop: 50%;\nleft: 50%;\nmargin-right: -50%;\ntransform: translate(-50%, -50%) }\n</style>\n</head>\n<body>\n<section>";
         if (req.getParameter("action").equals("getFileNames")) {
             // перебираем все елементы листа
-            resp.getWriter().println(
-                    "<!DOCTYPE html>\n" +
-                            "<html lang=\"en\">\n" +
-                            "<head>\n" +
-                            "    <meta charset=\"UTF-8\">\n" +
-                            "    <title>Dream job</title>\n" +
-                            "<style>" +
-                            "section {" +
-                            "position: absolute;" +
-                            "top: 50%;" +
-                            "left: 50%;" +
-                            "margin-right: -50%;" +
-                            "transform: translate(-50%, -50%) }" +
-                            "</style>" +
-                            "</head>\n" +
-                            "<body>\n" +
-                            "<section>" +
-                            "<a href='http://127.0.0.1:8888/single-servlet'>Add Files</a><br><br>" +
-                            "<p></p>"
-            );
+            resp.getWriter().println(htmlPartCodeStyle + "<a href='http://127.0.0.1:8888/single-servlet'>Add Files</a><br><br>" + "<p></p>");
             Storage.modelList.forEach(model -> {
                 try {
                     if (model.image != null) {
@@ -120,7 +102,6 @@ public class SecondServlet extends HttpServlet {
             // и тот который выдает результат клиенту
             BufferedInputStream bin = new BufferedInputStream(fin);
             BufferedOutputStream bout = new BufferedOutputStream(out);
-
             int ch = 0;
             // перебираем байты пока они существуют
             // берем входной поток данных, методом read получаем порции данных
@@ -145,71 +126,38 @@ public class SecondServlet extends HttpServlet {
                 Model model = modelOption.get();
                 if (model.image != null) {
                     try {
-                        resp.getWriter().println(
-                                "<!DOCTYPE html>\n" +
-                                        "<html lang=\"en\">\n" +
-                                        "<head>\n" +
-                                        "    <meta charset=\"UTF-8\">\n" +
-                                        "    <title>Dream job</title>\n" +
-                                        "<style>" +
-                                        "section {" +
-                                        "position: absolute;" +
-                                        "top: 50%;" +
-                                        "left: 50%;" +
-                                        "margin-right: -50%;" +
-                                        "transform: translate(-50%, -50%) }" +
-                                        "</style>" +
-                                        "</head>\n" +
-                                        "<body>\n" +
-                                        "<section >" +
-                                        "<h1 >" + model.userName + "</h1>\n" +
-                                        "<img src='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image + "' height=\"250\"/>" +
-                                        "<p></p>" +
-                                        "<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFileNames'>List of Files</a><br>" +
-                                        "<p></p>" +
-                                        "<a href='http://127.0.0.1:8888/single-servlet'>Add Files</a><br>" +
-                                        "<p></p>" +
-                                        "</section>" +
-                                        "</body>\n" +
-                                        "</html>"
+                        resp.getWriter().println(htmlPartCodeStyle +
+                                "<h1 >" + model.userName + "</h1>\n" +
+                                    "<img src='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image + "' height=\"250\"/>" + "<p></p>" +
+                                    "<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFileNames'>List of Files</a><br>" + "<p></p>" +
+                                    "<a href='http://127.0.0.1:8888/single-servlet'>Add Files</a><br>" + "<p></p>" +
+                                "</section>" + "</body>\n" + "</html>"
                         );
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-            } else  {
-                resp.getWriter().println(
-                        "<!DOCTYPE html>\n" +
-                                "<html lang=\"en\">\n" +
-                                "<head>\n" +
-                                "    <meta charset=\"UTF-8\">\n" +
-                                "    <title>Dream job</title>\n" +
-                                "</head>\n" +
-                                "<body>\n" +
-                                "    <h1>User with name '"+ req.getParameter("username")+"' not found</h1>\n" +
-
-                                "</body>\n" +
-                                "</html>"
+            } else {
+                resp.getWriter().println("<!DOCTYPE html>\n" + "<html lang=\"en\">\n" +
+                        "<head>\n" + "<meta charset=\"UTF-8\">\n" + "<title>Dream job</title>\n" + "</head>\n" +
+                        "<body>\n" +
+                            "<h1>User with name '" + req.getParameter("username") + "' not found</h1>\n" +
+                        "</body>\n" + "</html>"
                 );
+            }
+            // TODO здесь добавить еще один if, который будет срабатывать на запрос на адрес вида:
+            // http://0.0.0.0:8888/single-servlet/second-servlet?action=getInfo&username=user_name,
+            // где user_name - динамически подставленное имя файла
+            // по имени пользователя найдите из списка моделей одну модель,
+            // сформируйте при помощи вызовов метода writer.println(...)
+            // веб-страницу для клиента, в разметку которой добавьте элементы:
+            // h2 - с именем пользователя
+            // и img со ссылкой на изображение, подставленной в атрибут src
+            // (имя пользователя и имя файла получите из модели)
+            // подсказка: в атрибутах src формируйте гиперссылки вида:
+            // http://0.0.0.0:8888/single-servlet/second-servlet?action=getFile&filename=file_name
+            // , тогда браузер будет для получения каждого изображения сам обращаться к
+            // текущему сервлету, к ветке логики метода doGet, которая возвращает картинку по ее имени
         }
-
-        //
-        // TODO здесь добавить еще один if, который будет срабатывать на запрос на адрес вида:
-        // http://0.0.0.0:8888/single-servlet/second-servlet?action=getInfo&username=user_name,
-        // где user_name - динамически подставленное имя файла
-        // по имени пользователя найдите из списка моделей одну модель,
-        // сформируйте при помощи вызовов метода writer.println(...)
-        // веб-страницу для клиента, в разметку которой добавьте элементы:
-        // h2 - с именем пользователя
-        // и img со ссылкой на изображение, подставленной в атрибут src
-        // (имя пользователя и имя файла получите из модели)
-        // подсказка: в атрибутах src формируйте гиперссылки вида:
-        // http://0.0.0.0:8888/single-servlet/second-servlet?action=getFile&filename=file_name
-        // , тогда браузер будет для получения каждого изображения сам обращаться к
-        // текущему сервлету, к ветке логики метода doGet, которая возвращает картинку по ее имени
     }
 }
-}
-
-//  + "' width=\"229\" height=\"274\"/>" +
