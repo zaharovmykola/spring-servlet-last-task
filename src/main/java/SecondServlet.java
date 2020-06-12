@@ -62,8 +62,6 @@ public class SecondServlet extends HttpServlet {
         // Получить список имен файлов, ранее сохраненных на сервере
         if (req.getParameter("action").equals("getFileNames")) {
             // перебираем все елементы листа
-            //resp.getWriter().println("<a href='http://127.0.0.1:8888/single-servlet'>Add Files</a><br><br>");
-
 
             resp.getWriter().println(
                     "<!DOCTYPE html>\n" +
@@ -86,15 +84,10 @@ public class SecondServlet extends HttpServlet {
                             "</html>"
             );
 
-
             Storage.modelList.forEach(model -> {
                 try {
-                    // resp.getWriter().println(model.image);
-                    if (model.image != null) {
-                        //resp.getWriter()
-                        //.println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image+"'>"+model.image+"</a><br>");
-                        //resp.getWriter().println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br><br>");
 
+                    if (model.image != null) {
 
                         resp.getWriter().println(
                                 "<!DOCTYPE html>\n" +
@@ -116,8 +109,6 @@ public class SecondServlet extends HttpServlet {
                                         "</body>\n" +
                                         "</html>"
                         );
-
-
 
                     }
                 } catch (IOException e) {
@@ -185,13 +176,16 @@ public class SecondServlet extends HttpServlet {
                                         "    <meta charset=\"UTF-8\">\n" +
                                         "    <title>Dream job</title>\n" +
                                         "<style>"+
-                                        ".fig {" +
-                                        "text-align: center;" +
-                                        "}" +
+                                        "section {" +
+                                        "position: absolute;" +
+                                        "top: 50%;" +
+                                        "left: 50%;" +
+                                        "margin-right: -50%;" +
+                                        "transform: translate(-50%, -50%) }" +
                                         "</style>" +
                                         "</head>\n" +
                                         "<body>\n" +
-                                        "<div class='fig'>" +
+                                        "<section >" +
                                         "<h1 >" + model.userName + "</h1>\n" +
                                         "<img src='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image + "' width=\"229\" height=\"274\"/>" +
                                         "<p></p>" +
@@ -199,10 +193,11 @@ public class SecondServlet extends HttpServlet {
                                         "<p></p>" +
                                         "<a href='http://127.0.0.1:8888/single-servlet'>Add Files</a><br>" +
                                         "<p></p>" +
-                                        "</div>" +
+                                        "</section>" +
                                         "</body>\n" +
                                         "</html>"
                         );
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -222,7 +217,6 @@ public class SecondServlet extends HttpServlet {
                                 "</html>"
                 );
         }
-
 
         //
         // TODO здесь добавить еще один if, который будет срабатывать на запрос на адрес вида:

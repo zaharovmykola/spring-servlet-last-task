@@ -44,7 +44,6 @@ public class IndexServlet extends HttpServlet {
                         s -> writer.printf("%s = %s\n", key, s)
                 );
             });
-            // System.out.println("doGet");
         } finally {
             w.close();
         }

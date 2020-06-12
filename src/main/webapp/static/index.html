@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <title>Dream job</title>
     <style>
-        .fig {
-        text-align: center;
-        }
+         section {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              margin-right: -50%;
+              transform: translate(-50%, -50%) }
     </style>
 </head>
 <body>
-    <div class='fig'>
+    <section>
     <h1>Hello from Index.html!</h1>
     <form method="post" action="/single-servlet/second-servlet" enctype="multipart/form-data">
         <input type="text" name="user_name">
@@ -19,6 +22,6 @@
     </form>
         <p></p>
         <a href="http://127.0.0.1:8888/single-servlet/second-servlet?action=getFileNames">List of Files</a>
-    </div>
+    </section>
 </body>
 </html>
