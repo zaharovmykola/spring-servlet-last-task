@@ -163,7 +163,7 @@ public class SecondServlet extends HttpServlet {
                                         "<body>\n" +
                                         "<section >" +
                                         "<h1 >" + model.userName + "</h1>\n" +
-                                        "<img src='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image + "' width=\"229\" height=\"274\"/>" +
+                                        "<img src='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image + "' height=\"250\"/>" +
                                         "<p></p>" +
                                         "<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFileNames'>List of Files</a><br>" +
                                         "<p></p>" +
@@ -211,3 +211,5 @@ public class SecondServlet extends HttpServlet {
     }
 }
 }
+
+//  + "' width=\"229\" height=\"274\"/>" +
