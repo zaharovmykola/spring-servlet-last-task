@@ -62,62 +62,38 @@ public class SecondServlet extends HttpServlet {
         // Получить список имен файлов, ранее сохраненных на сервере
         if (req.getParameter("action").equals("getFileNames")) {
             // перебираем все елементы листа
-
             resp.getWriter().println(
                     "<!DOCTYPE html>\n" +
                             "<html lang=\"en\">\n" +
                             "<head>\n" +
                             "    <meta charset=\"UTF-8\">\n" +
                             "    <title>Dream job</title>\n" +
-                            "<style>"+
-                            ".fig {" +
-                            "text-align: center;" +
-                            "}" +
+                            "<style>" +
+                            "section {" +
+                            "position: absolute;" +
+                            "top: 50%;" +
+                            "left: 50%;" +
+                            "margin-right: -50%;" +
+                            "transform: translate(-50%, -50%) }" +
                             "</style>" +
                             "</head>\n" +
                             "<body>\n" +
-                            "<div class='fig'>" +
+                            "<section>" +
                             "<a href='http://127.0.0.1:8888/single-servlet'>Add Files</a><br><br>" +
-                            "<p></p>" +
-                            "</div>" +
-                            "</body>\n" +
-                            "</html>"
+                            "<p></p>"
             );
-
             Storage.modelList.forEach(model -> {
                 try {
-
                     if (model.image != null) {
-
-                        resp.getWriter().println(
-                                "<!DOCTYPE html>\n" +
-                                        "<html lang=\"en\">\n" +
-                                        "<head>\n" +
-                                        "    <meta charset=\"UTF-8\">\n" +
-                                        "    <title>Dream job</title>\n" +
-                                        "<style>"+
-                                        ".fig {" +
-                                        "text-align: center;" +
-                                        "}" +
-                                        "</style>" +
-                                        "</head>\n" +
-                                        "<body>\n" +
-                                        "<div class='fig'>" +
-                                        "<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br><br>" +
-                                        "<p></p>" +
-                                        "</div>" +
-                                        "</body>\n" +
-                                        "</html>"
-                        );
-
+                        resp.getWriter().println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br><br>" + "<p></p>");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
+            resp.getWriter().println("</section>" + "</body>\n" + "</html>");
             // Если к нам придет гет-запрос у которого параметр action равний getFile, то мы
         } else if (req.getParameter("action").equals("getFile")) {
-
             // http://0.0.0.0:8888/single-servlet/second-servlet?action=getFile&filename=file_name
             // Получить файл по его имени, переданному от клиента (вызываем кликом по гиперссылке
             // на странице со списком доступных файлов)
@@ -175,7 +151,7 @@ public class SecondServlet extends HttpServlet {
                                         "<head>\n" +
                                         "    <meta charset=\"UTF-8\">\n" +
                                         "    <title>Dream job</title>\n" +
-                                        "<style>"+
+                                        "<style>" +
                                         "section {" +
                                         "position: absolute;" +
                                         "top: 50%;" +
