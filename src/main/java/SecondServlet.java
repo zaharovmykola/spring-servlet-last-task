@@ -13,8 +13,18 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @WebServlet(urlPatterns = {"second-servlet"})
-@MultipartConfig(location = "D:\\IdeaProjects\\java-servlet-maven-master\\")
+@MultipartConfig(location = "/home/yurii/Downloads")
 public class SecondServlet extends HttpServlet {
+
+    private String contextPath;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        contextPath =
+            getServletContext().getContextPath();
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // достаем части данных из сервлета и перебираем циклом
@@ -53,7 +63,7 @@ public class SecondServlet extends HttpServlet {
 
         // в ответ присылаем браузеру указания перейти на заданный адрес
         // и браузер осуществляет этот переход
-        resp.sendRedirect("/single-servlet");
+        resp.sendRedirect(contextPath);
     }
 
     @Override
@@ -63,11 +73,11 @@ public class SecondServlet extends HttpServlet {
         String htmlPartCodeStyle = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Dream job</title>\n<style>\nsection {\nposition: absolute;\ntop: 50%;\nleft: 50%;\nmargin-right: -50%;\ntransform: translate(-50%, -50%) }\n</style>\n</head>\n<body>\n<section>";
         if (req.getParameter("action").equals("getFileNames")) {
             // перебираем все елементы листа
-            resp.getWriter().println(htmlPartCodeStyle + "<a href='http://127.0.0.1:8888/single-servlet'>Add Files</a><br><br>" + "<p></p>");
+            resp.getWriter().println(htmlPartCodeStyle + "<a href='" + contextPath + "'>Add Files</a><br><br>" + "<p></p>");
             Storage.modelList.forEach(model -> {
                 try {
                     if (model.image != null) {
-                        resp.getWriter().println("<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br><br>" + "<p></p>");
+                        resp.getWriter().println("<a href='" + contextPath + "/second-servlet?action=getInfo&username=" + model.userName + "'>" + model.userName + "</a><br><br>" + "<p></p>");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -90,7 +100,7 @@ public class SecondServlet extends HttpServlet {
             // FileInputStream - закачываем внутрь логики сервлета файл с жесткого диска сервера
             // FileInputStream - подготавливает эти данные из файла, вот их выкачивать
             FileInputStream fin =
-                    new FileInputStream("D:\\IdeaProjects\\java-servlet-maven-master\\" + req.getParameter("filename"));
+                    new FileInputStream("/home/yurii/Downloads/" + req.getParameter("filename"));
             // - подготавливаем входной поток
             // с помощью которго мы загрузим сначала эту картинку в оперативку,
             // чтобы потом передать ее веб-клиенту,
@@ -128,9 +138,9 @@ public class SecondServlet extends HttpServlet {
                     try {
                         resp.getWriter().println(htmlPartCodeStyle +
                                 "<h1 >" + model.userName + "</h1>\n" +
-                                    "<img src='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFile&filename=" + model.image + "' height=\"250\"/>" + "<p></p>" +
-                                    "<a href='http://127.0.0.1:8888/single-servlet/second-servlet?action=getFileNames'>List of Files</a><br>" + "<p></p>" +
-                                    "<a href='http://127.0.0.1:8888/single-servlet'>Add Files</a><br>" + "<p></p>" +
+                                    "<img src='" + contextPath + "/second-servlet?action=getFile&filename=" + model.image + "' height=\"250\"/>" + "<p></p>" +
+                                    "<a href='" + contextPath + "/second-servlet?action=getFileNames'>List of Files</a><br>" + "<p></p>" +
+                                    "<a href='" + contextPath + "'>Add Files</a><br>" + "<p></p>" +
                                 "</section>" + "</body>\n" + "</html>"
                         );
                     } catch (IOException e) {
